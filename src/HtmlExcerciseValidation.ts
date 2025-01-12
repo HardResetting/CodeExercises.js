@@ -1,61 +1,83 @@
-export class ValidationResult {
-    valid: boolean;
-    errors?: string[];
-    constructor(valid: boolean, errors?: string[]) {
-        this.valid = valid;
-        this.errors = errors;
-    }
-}
+import { Validation } from "./Validation";
+import { ValidationResult } from "./ValidationResult";
 
-export class HtmlExcerciseValidation {
-    constructor() { }
-    private rules: HtmlExcerciseValidationRule[] = [];
-
-    addValidation(rule: HtmlExcerciseValidationRule) {
-        this.rules.push(rule);
+export class HtmlExcerciseValidation extends Validation<HtmlValidationRuleSet> {
+    constructor() {
+        super(HtmlValidationRuleSet);
     }
 
     validate(stringVal: string, iframeDoc: Document): ValidationResult {
         const errors: string[] = [];
-        for (const rule of this.rules) {
-            if (!rule.test(stringVal, iframeDoc)) {
+
+        for (const rule of this._validationRuleSet.rules) {
+            if (!rule.method(stringVal, iframeDoc)) {
                 errors.push(rule.message);
             }
         }
 
-        return new ValidationResult(errors.length < 1, errors);
+        return new ValidationResult(errors.length > 0, errors);
     }
 }
 
-export interface HtmlExcerciseValidationRule {
-    test(value: string, iframeDoc: Document): boolean;
+class HtmlValidationRule {
+    constructor(method: (val: string, iframeDoc: Document) => boolean, message: string) {
+        this.method = method;
+        this.message = message;
+    }
+
+    method: (val: string, iframeDoc: Document) => boolean;
     message: string;
 }
 
-export class StringExpression implements HtmlExcerciseValidationRule {
-    func: (val: string) => boolean;
-    message: string;
-
-    constructor(func: (val: string) => boolean, message?: string) {
-        this.func = func;
-        this.message = message ?? "StringExpression failed!";
+export class HtmlValidationRuleSet {
+    private _rules: HtmlValidationRule[] = [];
+    get rules() {
+        return this._rules;
     }
 
-    test(value: string): boolean {
-        return this.func(value);
-    }
-}
-
-export class IFrameExpression implements HtmlExcerciseValidationRule {
-    func: (iframeDoc: Document) => boolean;
-    message: string;
-
-    constructor(func: (iframeDoc: Document) => boolean, message?: string) {
-        this.func = func;
-        this.message = message ?? "IFrameExpression failed!";
+    lambda(
+        method: (val: string, iframeDoc: Document) => boolean,
+        message: string
+    ): HtmlValidationRuleSet {
+        this._rules.push(new HtmlValidationRule(method, message));
+        return this;
     }
 
-    test(_: string, iframeDoc: Document): boolean {
-        return this.func(iframeDoc);
+    requiredString(message?: string): HtmlValidationRuleSet {
+        return this.lambda(
+            (val: string) => val.length > 0,
+            message || "String field is required."
+        );
+    }
+
+    stringEquals(compareTo: string, message?: string): HtmlValidationRuleSet {
+        return this.lambda(
+            (val: string) => val === compareTo,
+            message || `String field must equal '${compareTo}'.`
+        );
+    }
+
+    iframeContains(selector: string, message?: string): HtmlValidationRuleSet {
+        return this.lambda(
+            (_: string, iframeDoc: Document) => iframeDoc.querySelector(selector) !== null,
+            message || `IFrame must contain an element matching '${selector}'.`
+        );
+    }
+
+    iframeMatches(
+        testFunc: (iframeDoc: Document) => boolean,
+        message?: string
+    ): HtmlValidationRuleSet {
+        return this.lambda(
+            (_: string, iframeDoc: Document) => testFunc(iframeDoc),
+            message || "IFrame validation failed."
+        );
+    }
+
+    stringMatchesRegex(regex: RegExp, message?: string): HtmlValidationRuleSet {
+        return this.lambda(
+            (val: string) => regex.test(val),
+            message || `String must match the pattern '${regex.toString()}'.`
+        );
     }
 }

@@ -1,3 +1,5 @@
+import { HtmlExcercise } from "./Excercise";
+
 const constrainedInstances: Array<typeof ConstrainedEditor> = [];
 const restrictions: Array<RangeRestriction> = [];
 
@@ -25,6 +27,7 @@ const content = `
 </html>    
 `;
 
+const htmlExcercise: HtmlExcercise | null = null;
 
 export function test() {
     const element = document.getElementById("container");
@@ -35,10 +38,12 @@ export function test() {
     create(element, content, "html");
 }
 
-export function create(element?: HTMLElement, content?: string, language?: string) {
+export function create(element?: HTMLElement, content?: string, language?: string): HtmlExcercise {
     if (element == null) {
         throw "no element";
     }
+
+    const htmlExcercise = new HtmlExcercise(content);
 
     const range = {
         range: [11, 1, 11, 23], // Range of Function definition
@@ -62,6 +67,7 @@ export function create(element?: HTMLElement, content?: string, language?: strin
         throw "missing moddel";
     }
 
+
     constrainedInstance.initializeIn(editorInstance);
     changeRanges();
 
@@ -79,6 +85,8 @@ export function create(element?: HTMLElement, content?: string, language?: strin
         if (restrictions.length > 0) {
             const values = (model as unknown as ExtendedModel).getValueInEditableRanges();
             console.log("change:editable-ranges", values);
+            htmlExcercise.content = content;
+            htmlExcercise.renderIframe();
         }
 
 
@@ -92,4 +100,6 @@ export function create(element?: HTMLElement, content?: string, language?: strin
         const model = editorInstance!.getModel();
         constrainedInstance!.addRestrictionsTo(model!, restrictions);
     }
+
+    return htmlExcercise;
 };
