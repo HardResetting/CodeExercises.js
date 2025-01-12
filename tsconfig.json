@@ -13,7 +13,7 @@
                 "node_modules/*"
             ] // Resolve modules from node_modules
         },
-        "declaration": true,
+        "declaration": false,
         "outDir": "./dist",
         "strict": true
     },

@@ -15,7 +15,7 @@ export class HtmlExcerciseValidation extends Validation<HtmlValidationRuleSet> {
             }
         }
 
-        return new ValidationResult(errors.length > 0, errors);
+        return new ValidationResult(errors.length < 1, errors);
     }
 }
 
@@ -43,7 +43,7 @@ export class HtmlValidationRuleSet {
         return this;
     }
 
-    requiredString(message?: string): HtmlValidationRuleSet {
+    required(message?: string): HtmlValidationRuleSet {
         return this.lambda(
             (val: string) => val.length > 0,
             message || "String field is required."
@@ -54,6 +54,13 @@ export class HtmlValidationRuleSet {
         return this.lambda(
             (val: string) => val === compareTo,
             message || `String field must equal '${compareTo}'.`
+        );
+    }
+
+    stringIncludes(searchString: string, message?: string): HtmlValidationRuleSet {
+        return this.lambda(
+            (val: string) => val.includes(searchString),
+            message ?? `String must includes ${searchString}`
         );
     }
 

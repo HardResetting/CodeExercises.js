@@ -1,52 +1,70 @@
 import { HtmlExcerciseValidation } from "./HtmlExcerciseValidation";
+import { MonacoEditor } from "./MonacoEditor";
+import { ValidationResult } from "./ValidationResult";
 
 export abstract class Excercise<ExcerciseType> {
     constructor(ExcerciseTypeConstructor: new () => ExcerciseType, content?: string) {
-        this._excerciseValidation = new ExcerciseTypeConstructor();
+        this._validation = new ExcerciseTypeConstructor();
         this.content = content ?? "";
     }
 
-    protected _excerciseValidation: ExcerciseType;
+    protected _validation: ExcerciseType;
     public content: string;
 }
 
 export class HtmlExcercise extends Excercise<HtmlExcerciseValidation> {
-    constructor(content?: string, iframe?: HTMLIFrameElement) {
+    constructor(monacoEditorElement: HTMLElement, content?: string, iframe?: HTMLIFrameElement) {
         super(HtmlExcerciseValidation, content);
 
         if (iframe == null) {
             const newIFrame = document.createElement("iframe");
             document.body.appendChild(newIFrame);
-            this.iframe = newIFrame;
+            this._iframe = newIFrame;
         } else {
-            this.iframe = iframe;
+            this._iframe = iframe;
         }
+
+        this._monacoEditorInstance = new MonacoEditor(monacoEditorElement, content, "html");
+
+        this._monacoEditorInstance.onChangeContext.on((data) => {
+            this.content = data.content;
+            this.renderIframe();
+            this.validate();
+        })
+
+        this.content = content ?? "";
+        this.renderIframe();
     }
 
-    protected iframe: HTMLIFrameElement;
 
-    validate(): boolean {
+    protected _monacoEditorInstance: MonacoEditor;
+    protected _iframe: HTMLIFrameElement;
+    get validationRuleSet() {
+        return this._validation.validationRuleSet;
+    }
+
+    validate(): ValidationResult {
         this.renderIframe();
 
-        const document = this.iframe.contentDocument;
+        const document = this._iframe.contentDocument;
         if (document == null) {
             throw "contendDocument was null!";
         }
 
-        this._excerciseValidation.validate(this.content, document);
-        return true;
+        const result = this._validation.validate(this.content, document);
+        console.log(result);
+
+        return result;
     }
 
     renderIframe() {
-        if (this.iframe.srcdoc == null) {
+        if (this._iframe.srcdoc == null) {
             throw "iframe was null!";
         }
 
-        const iframeDoc = this.iframe.contentDocument!;
+        const iframeDoc = this._iframe.contentDocument!;
         iframeDoc.open();
         iframeDoc.write(this.content);
         iframeDoc.close();
-
-        console.log(iframeDoc);
     }
 }
