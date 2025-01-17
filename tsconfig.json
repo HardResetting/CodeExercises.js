@@ -15,7 +15,8 @@
         },
         "declaration": false,
         "outDir": "./dist",
-        "strict": true
+        "strict": true,
+        "noImplicitOverride": true
     },
     "include": [
         "src/**/*",

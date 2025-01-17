@@ -1,4 +1,5 @@
-import { HtmlExcercise } from "./Excercise";
+import EditableField from "./EditableField";
+import { HtmlExcercise } from "./HtmlExcercise";
 import { MonacoEditor, supportedLanguage } from "./MonacoEditor";
 
 const constrainedInstances: Array<typeof ConstrainedEditor> = [];
@@ -19,7 +20,7 @@ const content = `
     </style>
 </head>
 <body>
-    <div class="style-me">
+    <div>
         Style me! 
         <br />
         background-color: red;
@@ -46,13 +47,27 @@ export function create(element?: HTMLElement, content?: string, language?: suppo
 
     const htmlExcercise = new HtmlExcercise(element, content);
 
-    const result = htmlExcercise.validationRuleSet
+    htmlExcercise.validationRuleSet
         .required()
-        .iframeContains(".style-me", "no Style-me!")
+        .iframeContains(".style-me", "no '.Style-me'-element!")
         .stringIncludes("here")
         .lambda(val => {
-            return false;
-        }, "Error");
+            return Math.random() > 0.5;
+        }, "Random");
+
+
+    const styleField = new EditableField([11, 1, 11, 23], true);
+    styleField.ruleset
+        .required()
+        .endsWith("*/", "Need Multiline comment!");
+
+    const divField = new EditableField([16, 9, 16, 9], false);
+    divField.ruleset
+        .required();
+
+    htmlExcercise.setEditableFields([styleField, divField]);
+
+    htmlExcercise.onValidate.on(console.log);
 
     return htmlExcercise;
 };

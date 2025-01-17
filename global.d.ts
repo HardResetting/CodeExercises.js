@@ -12,6 +12,8 @@ declare global {
         validate?: Function;
     }
 
+    type ValueInEditableRanges = { [RangeLabel: string]: string };
+
     class ExtendedModel implements Monaco.editor.ITextModel {
         uri: Monaco.Uri;
         id: string;
@@ -79,7 +81,7 @@ declare global {
         onWillDispose: Monaco.IEvent<void>;
         dispose(): void;
         isAttachedToEditor(): boolean;
-        getValueInEditableRanges(): string[];
+        getValueInEditableRanges(): ValueInEditableRanges;
     }
 
     class ConstrainedEditor {
@@ -92,7 +94,7 @@ declare global {
             restrictions: RangeRestriction[]
         ): void;
 
-        removeAllRestrictionsFrom(model: Monaco.editor.ITextModel): void;
+        removeRestrictionsIn(model: Monaco.editor.ITextModel): void;
 
         getRestrictionsOf(model: Monaco.editor.ITextModel): RangeRestriction[];
 

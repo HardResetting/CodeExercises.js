@@ -15,7 +15,7 @@ export class HtmlExcerciseValidation extends Validation<HtmlValidationRuleSet> {
             }
         }
 
-        return new ValidationResult(errors.length < 1, errors);
+        return new ValidationResult(errors);
     }
 }
 
