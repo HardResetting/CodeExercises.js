@@ -4,8 +4,8 @@ import { HtmlValidationRule } from "./HtmlValidationRule";
 
 export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationRule> {
     private _rules: HtmlValidationRule[] = [];
-    get rules() {
-        return this._rules;
+    get rules(): ReadonlyArray<HtmlValidationRule> {
+        return this._rules as ReadonlyArray<HtmlValidationRule>;
     }
 
     lambda(
