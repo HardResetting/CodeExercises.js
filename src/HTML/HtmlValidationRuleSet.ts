@@ -1,35 +1,8 @@
-import { Validation } from "./Validation";
-import { ValidationResult } from "./ValidationResult";
+import { IValidationRuleSet } from "../Validation";
+import { HtmlValidationRule } from "./HtmlValidationRule";
 
-export class HtmlExcerciseValidation extends Validation<HtmlValidationRuleSet> {
-    constructor() {
-        super(HtmlValidationRuleSet);
-    }
 
-    validate(stringVal: string, iframeDoc: Document): ValidationResult {
-        const errors: string[] = [];
-
-        for (const rule of this._validationRuleSet.rules) {
-            if (!rule.method(stringVal, iframeDoc)) {
-                errors.push(rule.message);
-            }
-        }
-
-        return new ValidationResult(errors);
-    }
-}
-
-class HtmlValidationRule {
-    constructor(method: (val: string, iframeDoc: Document) => boolean, message: string) {
-        this.method = method;
-        this.message = message;
-    }
-
-    method: (val: string, iframeDoc: Document) => boolean;
-    message: string;
-}
-
-export class HtmlValidationRuleSet {
+export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationRule> {
     private _rules: HtmlValidationRule[] = [];
     get rules() {
         return this._rules;
@@ -68,16 +41,6 @@ export class HtmlValidationRuleSet {
         return this.lambda(
             (_: string, iframeDoc: Document) => iframeDoc.querySelector(selector) !== null,
             message || `IFrame must contain an element matching '${selector}'.`
-        );
-    }
-
-    iframeMatches(
-        testFunc: (iframeDoc: Document) => boolean,
-        message?: string
-    ): HtmlValidationRuleSet {
-        return this.lambda(
-            (_: string, iframeDoc: Document) => testFunc(iframeDoc),
-            message || "IFrame validation failed."
         );
     }
 

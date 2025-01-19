@@ -1,4 +1,3 @@
-import { Validation } from "./Validation";
 import { ValidationResult } from "./ValidationResult";
 
 export class EditableFieldValidationRule {

@@ -13,7 +13,7 @@ export class Event<T> implements IEvent<T> {
         this.handlers = this.handlers.filter(h => h !== handler);
     }
 
-    public trigger(data: T) {
+    public trigger(data: T): void {
         this.handlers.slice(0).forEach(h => h(data));
     }
 

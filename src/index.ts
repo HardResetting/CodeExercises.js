@@ -1,5 +1,5 @@
 import EditableField from "./EditableField";
-import { HtmlExcercise } from "./HtmlExcercise";
+import { HtmlExcercise } from "./HTML/HtmlExcercise";
 import { MonacoEditor, supportedLanguage } from "./MonacoEditor";
 
 const constrainedInstances: Array<typeof ConstrainedEditor> = [];
@@ -47,7 +47,7 @@ export function create(element?: HTMLElement, content?: string, language?: suppo
 
     const htmlExcercise = new HtmlExcercise(element, content);
 
-    htmlExcercise.validationRuleSet
+    htmlExcercise.addValidationRule
         .required()
         .iframeContains(".style-me", "no '.Style-me'-element!")
         .stringIncludes("here")
@@ -57,12 +57,12 @@ export function create(element?: HTMLElement, content?: string, language?: suppo
 
 
     const styleField = new EditableField([11, 1, 11, 23], true);
-    styleField.ruleset
+    styleField.addValidationRule
         .required()
         .endsWith("*/", "Need Multiline comment!");
 
-    const divField = new EditableField([16, 9, 16, 9], false);
-    divField.ruleset
+    const divField = new EditableField([16, 9, 16, 9]);
+    divField.addValidationRule
         .required();
 
     htmlExcercise.setEditableFields([styleField, divField]);

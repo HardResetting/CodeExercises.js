@@ -1,11 +1,9 @@
-export abstract class Validation<ValidationType> {
-    constructor(ValidationTypeConstructor: new () => ValidationType) {
-        this._validationRuleSet = new ValidationTypeConstructor();
-    }
+import { ValidationResult } from "./ValidationResult";
 
-    protected _validationRuleSet: ValidationType;
+export interface IValidationRuleSet<RuleType extends IValidationRule> {
+    rules: RuleType[];
+}
 
-    get validationRuleSet() {
-        return this._validationRuleSet;
-    }
+export interface IValidationRule {
+    message: string;
 }

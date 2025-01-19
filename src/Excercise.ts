@@ -1,13 +1,12 @@
 import EditableField from "./EditableField";
-import { EditableFieldValidationRuleSet } from "./EditableFieldValidation";
 import { Event } from "./Event";
-import { HtmlValidationRuleSet } from "./HtmlExcerciseValidation";
 import { MonacoEditor } from "./MonacoEditor";
+import { IValidationRule, IValidationRuleSet } from "./Validation";
 import { ValidationResult } from "./ValidationResult";
 
-export abstract class Excercise<ExcerciseType extends { get validationRuleSet(): HtmlValidationRuleSet }> {
+export abstract class Excercise<RuleType extends IValidationRule, RuleSetType extends IValidationRuleSet<RuleType>> {
     protected _editableFields: EditableField[];
-    protected readonly _validation: ExcerciseType;
+    protected abstract readonly _ruleSet: RuleSetType;
     protected readonly _monacoEditorInstance: MonacoEditor;
 
     public readonly onValidate = new Event<ValidationResult>();
@@ -16,12 +15,11 @@ export abstract class Excercise<ExcerciseType extends { get validationRuleSet():
         return this._monacoEditorInstance.content;
     }
 
-    public get validationRuleSet() {
-        return this._validation.validationRuleSet;
+    public get addValidationRule(): RuleSetType {
+        return this._ruleSet;
     }
 
-    constructor(ExcerciseTypeConstructor: new () => ExcerciseType, monacoEditorElement: HTMLElement, content?: string) {
-        this._validation = new ExcerciseTypeConstructor();
+    constructor(monacoEditorElement: HTMLElement, content?: string) {
         this._editableFields = [];
         this._monacoEditorInstance = new MonacoEditor(monacoEditorElement, content, "html");
 
