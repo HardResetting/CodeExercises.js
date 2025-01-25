@@ -30,7 +30,7 @@ export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationR
         );
     }
 
-    stringIncludes(searchString: string, message?: string): HtmlValidationRuleSet {
+    contentIncludes(searchString: string, message?: string): HtmlValidationRuleSet {
         return this.lambda(
             (val: string) => val.includes(searchString),
             message ?? `String must includes ${searchString}`

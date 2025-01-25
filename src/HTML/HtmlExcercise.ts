@@ -17,26 +17,27 @@ export class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationR
             this.iframe = newIFrame;
         } else {
             this.iframe = iframe;
-        }
+        }  
 
-        this._monacoEditorInstance.onChangeContext.on((data) => {
+        this._monacoEditorInstance.onChangeContext.on(_ => {
             this.renderIframe();
         })
 
         this.renderIframe();
     }
 
-    validateExtend(): ValidationResult {
+    protected validateExtend(): ValidationResult {
         this.renderIframe();
 
-        if (document == null) {
+        const contendDocument = this.iframe.contentDocument;
+        if (contendDocument == null) {
             throw "contendDocument was null!";
         }
 
         const errors: string[] = [];
 
         for (const rule of this._ruleSet.rules) {
-            if (!rule.method(this.content, document)) {
+            if (!rule.method(this.content, contendDocument)) {
                 errors.push(rule.message);
             }
         }

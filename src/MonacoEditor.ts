@@ -58,8 +58,6 @@ export class MonacoEditor {
             this.onChangeContext.trigger(new onChangeContextData(this.content, this.rangeValues))
         }, debounceTime);
         this._model.onDidChangeContent(callback);
-
-        console.log(this);
     }
 
     protected changeRanges(): void {
@@ -70,8 +68,6 @@ export class MonacoEditor {
         if (this._previousRestrictionLength > 1) {
             this._constrainedInstance.removeRestrictionsIn(this._model);
         }
-
-        console.log(this._rangeRestrictions);
 
         this._constrainedInstance!.addRestrictionsTo(this._model, this._rangeRestrictions);
         this._previousRestrictionLength = this._rangeRestrictions.length;

@@ -29,18 +29,8 @@ const content = `
 </html>    
 `;
 
-const htmlExcercise: HtmlExcercise | null = null;
-
 export function test() {
     const element = document.getElementById("container");
-    if (element == null) {
-        throw "no element";
-    }
-
-    create(element, content, "html");
-}
-
-export function create(element?: HTMLElement, content?: string, language?: supportedLanguage): HtmlExcercise {
     if (element == null) {
         throw "no element";
     }
@@ -50,10 +40,10 @@ export function create(element?: HTMLElement, content?: string, language?: suppo
     htmlExcercise.addValidationRule
         .required()
         .iframeContains(".style-me", "no '.Style-me'-element!")
-        .stringIncludes("here")
-        .lambda(val => {
+        .contentIncludes("here")
+        .lambda((content, iframe) => {
             return Math.random() > 0.5;
-        }, "Random");
+        }, "Random Check failed!");
 
 
     const styleField = new EditableField([11, 1, 11, 23], true);
@@ -70,4 +60,4 @@ export function create(element?: HTMLElement, content?: string, language?: suppo
     htmlExcercise.onValidate.on(console.log);
 
     return htmlExcercise;
-};
+}
