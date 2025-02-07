@@ -1,6 +1,7 @@
+import { color2Lab } from "../Color";
 import { IValidationRuleSet } from "../Validation";
 import { HtmlValidationRule } from "./HtmlValidationRule";
-
+import { getDeltaE00 } from "delta-e"
 
 export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationRule> {
     private _rules: HtmlValidationRule[] = [];
@@ -42,6 +43,32 @@ export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationR
             (_: string, iframeDoc: Document) => iframeDoc.querySelector(selector) !== null,
             message || `IFrame must contain an element matching '${selector}'.`
         );
+    }
+
+    elementHasAttributeColor(selector: string, property: string, color: string, delta: number = 50, message?: string) {
+        return this.lambda(
+            (_: string, iframeDoc: Document) => {
+                const lab1 = color2Lab(color);
+
+                const elem = iframeDoc.querySelector(selector);
+                if (elem == null) {
+                    return false;
+                }
+
+                const compStyles = window.getComputedStyle(elem);
+                const propertyStr = compStyles.getPropertyValue(property);
+                if(propertyStr == "") {
+                    return false;
+                }
+                
+                const lab2 = color2Lab(propertyStr);
+                const deltaResult = getDeltaE00(lab1, lab2);
+                console.log(deltaResult);
+
+                return deltaResult <= delta;
+            },
+            message || `Element '${selector}' is missig, has no property ${property} or does not have color '${color}'.`
+        )
     }
 
     stringMatchesRegex(regex: RegExp, message?: string): HtmlValidationRuleSet {

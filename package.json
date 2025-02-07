@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/delta-e": "^0.0.2",
     "@typescript-eslint/eslint-plugin": "^8.19.1",
     "@typescript-eslint/parser": "^8.19.1",
     "eslint": "^9.17.0",
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "debounce": "^2.2.0",
+    "delta-e": "^0.0.8",
     "monaco-editor": "^0.52.2"
   }
 }

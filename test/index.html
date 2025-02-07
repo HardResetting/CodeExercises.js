@@ -43,9 +43,7 @@
                 .required()
                 .iframeContains(".style-me", "no '.Style-me'-element!")
                 .contentIncludes("here")
-                .lambda((content, iframe) => {
-                    return Math.random() > 0.5;
-                }, "Random Check failed!");
+                .elementHasAttributeColor(".style-me", "background-color", "#f00", null);
 
 
             const styleField = new EditableField([11, 1, 11, 23], true);
@@ -60,7 +58,7 @@
 
             htmlExcercise.onValidate.on(data => {
                 console.log(data);
-                response.innerText = data.valid ? "Gut gemacht! Alles richtig!" : "Folgendes ist noch falsch: " + data.errors.reduce((e, a) => e + "\n" + a,"");
+                response.innerText = data.valid ? "Gut gemacht! Alles richtig!" : "Folgendes ist noch falsch: " + data.errors.reduce((e, a) => e + "\n" + a, "");
             });
 
             return htmlExcercise;
@@ -90,7 +88,7 @@
 </html>    
 `;
 
-    window.test();
+        window.test();
     </script>
 </body>
 
