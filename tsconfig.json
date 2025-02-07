@@ -13,7 +13,8 @@
                 "node_modules/*"
             ] // Resolve modules from node_modules
         },
-        "declaration": false,
+        "declaration": true,
+        "declarationDir": "./types",
         "outDir": "./dist",
         "strict": true,
         "noImplicitOverride": true
