@@ -14,7 +14,7 @@
             ] // Resolve modules from node_modules
         },
         "declaration": true,
-        "declarationDir": "./types",
+        "declarationDir": "./dist/types",
         "outDir": "./dist",
         "strict": true,
         "noImplicitOverride": true
