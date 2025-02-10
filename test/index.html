@@ -43,6 +43,7 @@
                 .required()
                 .iframeContains(".style-me", "no '.Style-me'-element!")
                 .contentIncludes("here")
+                .elementIncludesText("body>div", "me")
                 .elementHasAttributeColor(".style-me", "background-color", "#f00", null);
 
 
