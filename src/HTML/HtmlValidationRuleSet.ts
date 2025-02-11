@@ -10,7 +10,7 @@ export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationR
     }
 
     lambda(
-        method: (val: string, iframeDoc: Document) => boolean,
+        method: (val: string, iframeDoc: Document) => boolean | Promise<boolean>,
         message: string
     ): HtmlValidationRuleSet {
         this._rules.push(new HtmlValidationRule(method, message));
@@ -22,6 +22,31 @@ export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationR
             (val: string) => val.length > 0,
             message ?? "String field is required."
         );
+    }
+
+    isValidHtml(message?: string) {
+        return this.lambda(
+            async val => {
+                let response = { messages: Array<string> };
+                try {
+                    const uniResponse = await fetch("https://validator.w3.org/nu/?out=json&level=error", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "text/html; charset=UTF-8"
+                        },
+                        body: val
+                    });
+
+                    response = await uniResponse.json(); // Get raw text response
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+                console.log(response.messages); // Output the response
+
+                return response.messages.length == 0;
+            },
+            message ?? "Invalid HTML."
+        )
     }
 
     stringEquals(compareTo: string, message?: string): HtmlValidationRuleSet {
@@ -78,7 +103,7 @@ export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationR
                 if (elem == null) {
                     return false;
                 }
-               
+
                 return (elem as HTMLElement).innerText.includes(text);
             },
             message ?? `Element '${selector}' is missig or text does not match ${text}.`

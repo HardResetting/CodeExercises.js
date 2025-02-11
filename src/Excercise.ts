@@ -38,7 +38,7 @@ export abstract class Excercise<RuleType extends IValidationRule, RuleSetType ex
         this.editableFieldsChanged();
     }
 
-    public validate(): ValidationResult {
+    public async validate(): Promise<ValidationResult> {
         const rangeValues = this._monacoEditorInstance.rangeValues;
         const result = this._editableFields
             .map(e => {
@@ -49,7 +49,7 @@ export abstract class Excercise<RuleType extends IValidationRule, RuleSetType ex
 
                 return e.validate(val);
             })
-            .concat(this.validateExtend())
+            .concat((await this.validateExtend()))
             .reduce((prev, cur) => new ValidationResult(prev.errors.concat(cur.errors)));
 
         this.onValidate.trigger(result);
@@ -59,7 +59,7 @@ export abstract class Excercise<RuleType extends IValidationRule, RuleSetType ex
     /**
      * Override this method to add custom validation
      */
-    protected abstract validateExtend(): ValidationResult;
+    protected abstract validateExtend(): Promise<ValidationResult>;
 
     private editableFieldsChanged(): void {
         const list: RangeRestriction[] = [];

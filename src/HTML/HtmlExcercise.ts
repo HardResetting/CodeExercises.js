@@ -17,7 +17,7 @@ export class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationR
             this.iframe = newIFrame;
         } else {
             this.iframe = iframe;
-        }  
+        }
 
         this._monacoEditorInstance.onChangeContext.on(_ => {
             this.renderIframe();
@@ -26,7 +26,7 @@ export class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationR
         this.renderIframe();
     }
 
-    protected validateExtend(): ValidationResult {
+    protected async validateExtend(): Promise<ValidationResult> {
         this.renderIframe();
 
         const contendDocument = this.iframe.contentDocument;
@@ -37,13 +37,13 @@ export class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationR
         const errors: string[] = [];
 
         for (const rule of this._ruleSet.rules) {
-            if (!rule.method(this.content, contendDocument)) {
+            if (!(await rule.method(this.content, contendDocument))) {
                 errors.push(rule.message);
             }
         }
 
         return new ValidationResult(errors);
-        }
+    }
 
     public renderIframe(): void {
         if (this.iframe.srcdoc == null) {
