@@ -1,9 +1,9 @@
 import { color2Lab } from "../Color";
-import { IValidationRuleSet } from "../Validation";
+import { ValidationRuleSet } from "../Validation";
 import { HtmlValidationRule } from "./HtmlValidationRule";
 import { getDeltaE00 } from "delta-e"
 
-export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationRule> {
+export class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidationRule> {
     private _rules: HtmlValidationRule[] = [];
     get rules(): ReadonlyArray<HtmlValidationRule> {
         return this._rules as ReadonlyArray<HtmlValidationRule>;
@@ -13,7 +13,13 @@ export class HtmlValidationRuleSet implements IValidationRuleSet<HtmlValidationR
         method: (val: string, iframeDoc: Document) => boolean | Promise<boolean>,
         message: string
     ): HtmlValidationRuleSet {
-        this._rules.push(new HtmlValidationRule(method, message));
+        if (this._negateNext) {
+            this._negateNext = false;
+            const negatedMethod = async (val: string, iframeDoc: Document) => !(await method(val, iframeDoc));
+            this._rules.push(new HtmlValidationRule(negatedMethod, `Negated: ${message}`));
+        } else {
+            this._rules.push(new HtmlValidationRule(method, message));
+        }
         return this;
     }
 

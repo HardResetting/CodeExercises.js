@@ -5,11 +5,11 @@ import { HtmlValidationRule } from "./HtmlValidationRule";
 
 export class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationRuleSet> {
     public readonly iframe: HTMLIFrameElement;
-    protected override _ruleSet: HtmlValidationRuleSet;
+    protected override _ruleSets: HtmlValidationRuleSet[];
 
     constructor(monacoEditorElement: HTMLElement, content?: string, iframe?: HTMLIFrameElement) {
         super(monacoEditorElement, content);
-        this._ruleSet = new HtmlValidationRuleSet();
+        this._ruleSets = [];
         if (iframe == null) {
             const newIFrame = document.createElement("iframe");
             newIFrame.setAttribute("style", "display: none");
@@ -26,6 +26,12 @@ export class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationR
         this.renderIframe();
     }
 
+    public override addValidationRule(): HtmlValidationRuleSet {
+        const obj = new HtmlValidationRuleSet();
+        this._ruleSets.push(obj);
+        return obj;
+    }
+
     protected async validateExtend(): Promise<ValidationResult> {
         this.renderIframe();
 
@@ -36,13 +42,29 @@ export class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationR
 
         const errors: string[] = [];
 
-        for (const rule of this._ruleSet.rules) {
-            if (!(await rule.method(this.content, contendDocument))) {
-                errors.push(rule.message);
+        for (const ruleSet of this._ruleSets) {
+            for (const rule of ruleSet.rules) {
+                if (!(await rule.method(this.content, contendDocument))) {
+                    errors.push(rule.message);
+                    if (ruleSet.shouldStopOnFail) {
+                        break;
+                    }
+                }
             }
         }
 
         return new ValidationResult(errors);
+    }
+
+    protected async validateRule(rule: HtmlValidationRule): Promise<boolean> {
+        this.renderIframe();
+
+        const contendDocument = this.iframe.contentDocument;
+        if (contendDocument == null) {
+            throw "contendDocument was null!";
+        }
+
+        return await rule.method(this.content, contendDocument);
     }
 
     public renderIframe(): void {

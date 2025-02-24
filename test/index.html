@@ -39,13 +39,17 @@
 
             const htmlExcercise = new HtmlExcercise(element, content, iframe);
 
-            htmlExcercise.addValidationRule
+            console.log(htmlExcercise.addValidationRule());
+
+            htmlExcercise.addValidationRule()
+                .stopOnFail()
                 .required()
                 .isValidHtml()
-                .iframeContains(".style-me", "no '.Style-me'-element!")
+                .not.iframeContains(".style-me", "no '.Style-me'-element!")
                 .contentIncludes("here")
                 .elementIncludesText("body>div", "me")
-                .elementHasAttributeColor(".style-me", "background-color", "#f00", null);
+                .elementHasAttributeColor(".style-me", "background-color", "#f00", null)
+                ;
 
 
             const styleField = new EditableField([11, 1, 11, 23], true);

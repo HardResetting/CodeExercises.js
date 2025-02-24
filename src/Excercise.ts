@@ -1,23 +1,13 @@
 import EditableField from "./EditableField";
 import { Event } from "./Event";
 import { MonacoEditor } from "./MonacoEditor";
-import { IValidationRule, IValidationRuleSet } from "./Validation";
+import { IValidationRule, ValidationRuleSet } from "./Validation";
 import { ValidationResult } from "./ValidationResult";
 
-export abstract class Excercise<RuleType extends IValidationRule, RuleSetType extends IValidationRuleSet<RuleType>> {
+export abstract class Excercise<RuleType extends IValidationRule, RuleSetType extends ValidationRuleSet<RuleType>> {
     protected _editableFields: EditableField[];
-    protected abstract readonly _ruleSet: RuleSetType;
+    protected abstract readonly _ruleSets: RuleSetType[];
     protected readonly _monacoEditorInstance: MonacoEditor;
-
-    public readonly onValidate = new Event<ValidationResult>();
-
-    public get content(): string {
-        return this._monacoEditorInstance.content;
-    }
-
-    public get addValidationRule(): RuleSetType {
-        return this._ruleSet;
-    }
 
     constructor(monacoEditorElement: HTMLElement, content?: string) {
         this._editableFields = [];
@@ -26,6 +16,16 @@ export abstract class Excercise<RuleType extends IValidationRule, RuleSetType ex
         this._monacoEditorInstance.onChangeContext.on(() => {
             this.validate();
         })
+    }
+
+    public abstract addValidationRule(): RuleSetType;
+
+    protected abstract validateRule(rule: RuleType): Promise<boolean> | boolean;
+
+    public readonly onValidate = new Event<ValidationResult>();
+
+    public get content(): string {
+        return this._monacoEditorInstance.content;
     }
 
     public setEditableFields(fields: EditableField[]) {
