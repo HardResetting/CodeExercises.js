@@ -1,5 +1,5 @@
 {
-  "name": "codeexercises",
+  "name": "code-exercises-js",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,8 +9,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "description": "",
+  "license": "MIT",
+  "description": "Create exercises for your students!",
   "devDependencies": {
     "@types/delta-e": "^0.0.2",
     "@typescript-eslint/eslint-plugin": "^8.19.1",
