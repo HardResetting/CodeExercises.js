@@ -16,7 +16,7 @@ export class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidationRule>
         if (this._negateNext) {
             this._negateNext = false;
             const negatedMethod = async (val: string, iframeDoc: Document) => !(await method(val, iframeDoc));
-            this._rules.push(new HtmlValidationRule(negatedMethod, `Negated: ${message}`));
+            this._rules.push(new HtmlValidationRule(negatedMethod, message));
         } else {
             this._rules.push(new HtmlValidationRule(method, message));
         }
@@ -26,11 +26,11 @@ export class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidationRule>
     required(message?: string): HtmlValidationRuleSet {
         return this.lambda(
             (val: string) => val.length > 0,
-            message ?? "String field is required."
+            message ?? (this._negateNext ? "String should be empty" : "String field is required")
         );
     }
 
-    isValidHtml(message?: string) {
+    isValidHTML(message?: string) {
         return this.lambda(
             async val => {
                 let response = { messages: Array<string> };
@@ -51,28 +51,30 @@ export class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidationRule>
 
                 return response.messages.length == 0;
             },
-            message ?? "Invalid HTML."
+            message ?? (this._negateNext ? "Valid HTML" : "Invalid HTML")
         )
     }
 
     stringEquals(compareTo: string, message?: string): HtmlValidationRuleSet {
         return this.lambda(
             (val: string) => val === compareTo,
-            message ?? `String field must equal '${compareTo}'.`
+            message ?? (this._negateNext ? `String field must not equal '${compareTo}'.` : `String field must equal '${compareTo}'.`)
         );
     }
 
     contentIncludes(searchString: string, message?: string): HtmlValidationRuleSet {
         return this.lambda(
             (val: string) => val.includes(searchString),
-            message ?? `String must includes ${searchString}`
+            message ?? (this._negateNext ? `String field must not include '${searchString}'.` : `String field must include '${searchString}'.`)
         );
     }
 
     iframeContains(selector: string, message?: string): HtmlValidationRuleSet {
         return this.lambda(
             (_: string, iframeDoc: Document) => iframeDoc.querySelector(selector) !== null,
-            message ?? `IFrame must contain an element matching '${selector}'.`
+            message ?? (this._negateNext
+                ? `IFrame must not contain an element matching '${selector}'.`
+                : `IFrame must contain an element matching '${selector}'.`)
         );
     }
 
@@ -98,8 +100,10 @@ export class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidationRule>
 
                 return deltaResult <= delta;
             },
-            message ?? `Element '${selector}' is missig, has no property ${property} or does not have color '${color}'.`
-        )
+            message ?? (this._negateNext
+                ? `Element '${selector}' exists, and has property '${property}' and color '${color}'.`
+                : `Element '${selector}' is missig, has no property '${property}' or does not have color '${color}'.`
+            ))
     }
 
     elementIncludesText(selector: string, text: string, message?: string) {
@@ -110,16 +114,36 @@ export class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidationRule>
                     return false;
                 }
 
-                return (elem as HTMLElement).innerText.includes(text);
+                return (elem as HTMLElement).innerText.toLowerCase().includes(text.toLowerCase());
             },
-            message ?? `Element '${selector}' is missig or text does not match ${text}.`
-        )
+            message ?? (this._negateNext
+                ? `Element '${selector}' exists and text matches '${text}'.`
+                : `Element '${selector}' is missig or text does not match '${text}'.`
+            ))
+    }
+
+    elementTextMatchesRegex(selector: string, regex: RegExp, message?: string) {
+        return this.lambda(
+            (_: string, iframeDoc: Document) => {
+                const elem = iframeDoc.querySelector(selector);
+                if (elem == null) {
+                    return false;
+                }
+
+                return regex.test((elem as HTMLElement).innerText);
+            },
+            message ?? (this._negateNext
+                ? `Element '${selector}' exists and text matches '${regex}'.`
+                : `Element '${selector}' is missig or text does not match '${regex}'.`
+            ))
     }
 
     stringMatchesRegex(regex: RegExp, message?: string): HtmlValidationRuleSet {
         return this.lambda(
             (val: string) => regex.test(val),
-            message ?? `String must match the pattern '${regex.toString()}'.`
-        );
+            message ?? (this._negateNext
+                ? `String matches the pattern '${regex}'.`
+                : `String does not match the pattern '${regex}'.`
+            ))
     }
 }
