@@ -42,9 +42,8 @@
             console.log(htmlExcercise.addValidationRule());
 
             htmlExcercise.addValidationRule()
-                .stopOnFail()
+                .stopOnFail(false)
                 .required()
-                .isValidHtml()
                 .not.iframeContains(".style-me", "no '.Style-me'-element!")
                 .contentIncludes("here")
                 .elementIncludesText("body>div", "me")
@@ -60,7 +59,7 @@
             divField.addValidationRule
                 .required();
 
-            // htmlExcercise.setEditableFields([styleField, divField]);
+            htmlExcercise.setEditableFields([styleField, divField]);
 
             htmlExcercise.onValidate.on(data => {
                 console.log(data);

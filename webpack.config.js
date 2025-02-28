@@ -31,7 +31,7 @@ module.exports = [
             'monaco-editor': 'monaco',
             'constrained-editor-plugin': 'constrained-editor-plugin',
         },
-        mode: 'development',
+        mode: 'production',
     },
     // // CommonJS/UMD Configuration
     // {
