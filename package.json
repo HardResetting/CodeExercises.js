@@ -1,15 +1,15 @@
 {
   "name": "code-exercises-js",
-  "version": "1.0.2",
-  "main": "codeExercises.esm.js",
+  "version": "1.0.4",
+  "main": "dist/codeExercises.esm.js",
   "scripts": {
     "build": "webpack",
     "dev": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": ["/dist/*"],
-  "keywords": [],
-  "author": "",
+  "keywords": ["exercises", "students"],
+  "author": "Dimitri Sribnij",
   "license": "MIT",
   "description": "Create exercises for your students!",
   "devDependencies": {

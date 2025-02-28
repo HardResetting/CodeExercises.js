@@ -9,7 +9,7 @@ Include the required scripts in your project:
     <script type="module">
         import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.39.0/+esm';
         import { constrainedEditor } from 'https://cdn.jsdelivr.net/gh/Pranomvignesh/constrained-editor-plugin@1.3.0/src/constrainedEditor.js';
-        import { HtmlExcercise, EditableField } from "codeExercises.esm.js"
+        import { HtmlExcercise, EditableField } from "https://cdn.jsdelivr.net/npm/code-exercises-js@1.0.3"
 
         Object.assign(window, { monaco, constrainedEditor, HtmlExcercise });
     </script>
@@ -111,7 +111,7 @@ htmlExercise.onValidate.on(data => {
     <script type="module">
         import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.39.0/+esm';
         import { constrainedEditor } from 'https://cdn.jsdelivr.net/gh/Pranomvignesh/constrained-editor-plugin@1.3.0/src/constrainedEditor.js';
-        import { HtmlExcercise, EditableField } from "../dist/codeExercises.esm.js"
+        import { HtmlExcercise, EditableField } from "https://cdn.jsdelivr.net/npm/code-exercises-js@1.0.3"
 
         Object.assign(window, { monaco, constrainedEditor, HtmlExcercise });
 
