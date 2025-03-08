@@ -1,16 +1,8 @@
+import { EditableFieldValidationRule } from "./EditableFieldValidationRule";
+import { ValidationRuleSet } from "./Validation";
 import { ValidationResult } from "./ValidationResult";
 
-export class EditableFieldValidationRule {
-    constructor(method: (val: string) => boolean, message: string) {
-        this.method = method;
-        this.message = message;
-    }
-
-    method: (val: string) => boolean;
-    message: string;
-}
-
-export class EditableFieldValidationRuleSet {
+export class EditableFieldValidationRuleSet extends ValidationRuleSet<EditableFieldValidationRule> {
     private _rules: EditableFieldValidationRule[] = [];
     get rules() {
         return this._rules;

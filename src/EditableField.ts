@@ -1,4 +1,4 @@
-import { EditableFieldValidationRuleSet } from "./EditableFieldValidation";
+import { EditableFieldValidationRuleSet } from "./EditableFieldValidationRuleSet";
 import { ValidationResult } from "./ValidationResult";
 
 export default class EditableField {

@@ -1,4 +1,4 @@
-import { IValidationRule } from "../Validation";
+import { IValidationRule } from "src/IValidationRule";
 
 export class HtmlValidationRule implements IValidationRule {
     constructor(method: (val: string, iframeDoc: Document) => boolean | Promise<boolean>, message: string) {

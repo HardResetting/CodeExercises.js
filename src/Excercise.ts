@@ -1,7 +1,8 @@
 import EditableField from "./EditableField";
 import { Event } from "./Event";
 import { MonacoEditor } from "./MonacoEditor";
-import { IValidationRule, ValidationRuleSet } from "./Validation";
+import { ValidationRuleSet } from "./Validation";
+import { IValidationRule } from "./IValidationRule";
 import { ValidationResult } from "./ValidationResult";
 
 export abstract class Excercise<RuleType extends IValidationRule, RuleSetType extends ValidationRuleSet<RuleType>> {
