@@ -1,7 +1,31 @@
 import EditableField from "./EditableField";
-import { HtmlExcercise } from "./HTML/HtmlExcercise";
+import EditableFieldValidationRule from "./EditableFieldValidationRule";
+import EditableFieldValidationRuleSet from "./EditableFieldValidationRuleSet";
+import Event from "./Event";
+import Exercise from "./Exercise";
+import IEvent from "./IEvent";
+import IValidationRule from "./IValidationRule";
+import HtmlExcercise from "./HTML/HtmlExercise";
+import HtmlValidationRule from "./HTML/HtmlValidationRule";
+import HtmlValidationRuleSet from "./HTML/HtmlValidationRuleSet";
+import { MonacoEditor, onChangeContextData, supportedLanguage } from "./MonacoEditor";
+import Validation from "./Validation";
+import ValidationResult from "./ValidationResult";
 
 export {
+    EditableField,
+    EditableFieldValidationRule,
+    EditableFieldValidationRuleSet,
+    Event,
+    Exercise,
+    IEvent,
+    IValidationRule,
     HtmlExcercise,
-    EditableField
-}
+    HtmlValidationRule,
+    HtmlValidationRuleSet,
+    MonacoEditor,
+    onChangeContextData,
+    supportedLanguage,
+    Validation,
+    ValidationResult
+};

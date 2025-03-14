@@ -1,8 +1,6 @@
-interface IEvent<T> {
-    on(handler: { (data?: T): void; }): void;
-    off(handler: { (data?: T): void; }): void;
-}
-export class Event<T> implements IEvent<T> {
+import IEvent from "./IEvent";
+
+export default class Event<T> implements IEvent<T> {
     private handlers: { (data: T): void; }[] = [];
 
     public on(handler: { (data: T): void; }): void {

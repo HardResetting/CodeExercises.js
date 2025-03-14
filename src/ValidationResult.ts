@@ -1,4 +1,4 @@
-export class ValidationResult {
+export default class ValidationResult {
     get valid(): boolean {
         return (this.errors?.length ?? 0) == 0;
     };

@@ -1,9 +1,9 @@
 import { color2Lab } from "../Color";
-import { ValidationRuleSet } from "../Validation";
-import { HtmlValidationRule } from "./HtmlValidationRule";
+import ValidationRuleSet from "../Validation";
+import HtmlValidationRule from "./HtmlValidationRule";
 import { getDeltaE00 } from "delta-e"
 
-export class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidationRule> {
+export default class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidationRule> {
     private _rules: HtmlValidationRule[] = [];
     get rules(): ReadonlyArray<HtmlValidationRule> {
         return this._rules as ReadonlyArray<HtmlValidationRule>;

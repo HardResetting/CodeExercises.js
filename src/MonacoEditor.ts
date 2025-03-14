@@ -1,5 +1,5 @@
 import { editor } from "monaco-editor";
-import { Event } from "./Event";
+import Event from "./Event";
 import * as debounce from "debounce";
 
 export class onChangeContextData {

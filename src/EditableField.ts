@@ -1,9 +1,13 @@
-import { EditableFieldValidationRuleSet } from "./EditableFieldValidationRuleSet";
-import { ValidationResult } from "./ValidationResult";
+import EditableFieldValidationRuleSet from "./EditableFieldValidationRuleSet";
+import ValidationResult from "./ValidationResult";
 
 export default class EditableField {
-    private readonly _ruleset: EditableFieldValidationRuleSet = new EditableFieldValidationRuleSet();
-    public get addValidationRule() {return this._ruleset};
+    private readonly _ruleSets: Array<EditableFieldValidationRuleSet> = [];
+    public addValidationRule() {
+        const obj = new EditableFieldValidationRuleSet();
+        this._ruleSets.push(obj);
+        return obj;
+    };
     public range: [number, number, number, number];
     public allowMultiline: boolean;
     public id: string;
@@ -15,6 +19,18 @@ export default class EditableField {
     }
 
     public validate(content: string): ValidationResult {
-        return this._ruleset.validate(content);
+        const errors: string[] = [];
+
+        for (const ruleSet of this._ruleSets) {
+            for (const rule of ruleSet.rules) {
+                if (!(rule.method(content))) {
+                    errors.push(rule.message);
+                    if (ruleSet.shouldStopOnFail) {
+                        break;
+                    }
+                }
+            }
+        }
+        return new ValidationResult(errors);
     }
 }

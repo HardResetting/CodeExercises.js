@@ -1,7 +1,7 @@
-import { IValidationRule } from "./IValidationRule";
+import IValidationRule from "./IValidationRule";
 
 
-export class EditableFieldValidationRule implements IValidationRule {
+export default class EditableFieldValidationRule implements IValidationRule {
     constructor(method: (val: string) => boolean, message: string) {
         this.method = method;
         this.message = message;

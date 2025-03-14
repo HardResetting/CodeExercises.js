@@ -1,3 +1,3 @@
-export interface IValidationRule {
+export default interface IValidationRule {
     message: string;
 }

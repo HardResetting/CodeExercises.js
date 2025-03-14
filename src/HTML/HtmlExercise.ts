@@ -1,9 +1,9 @@
-import { Excercise } from "../Excercise";
-import { HtmlValidationRuleSet } from "./HtmlValidationRuleSet";
-import { ValidationResult } from "../ValidationResult";
-import { HtmlValidationRule } from "./HtmlValidationRule";
+import Excercise from "../Exercise";
+import HtmlValidationRuleSet from "./HtmlValidationRuleSet";
+import ValidationResult from "../ValidationResult";
+import HtmlValidationRule from "./HtmlValidationRule";
 
-export class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationRuleSet> {
+export default class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationRuleSet> {
     public readonly iframe: HTMLIFrameElement;
     protected override _ruleSets: HtmlValidationRuleSet[];
 

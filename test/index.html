@@ -52,12 +52,12 @@
 
 
             const styleField = new EditableField([11, 1, 11, 23], true);
-            styleField.addValidationRule
+            styleField.addValidationRule()
                 .endsWith("*/", "Need Multiline comment!");
 
             const divField = new EditableField([16, 9, 16, 9]);
-            divField.addValidationRule
-                .required();
+            divField.addValidationRule()
+                .not.required();
 
             htmlExcercise.setEditableFields([styleField, divField]);
 
