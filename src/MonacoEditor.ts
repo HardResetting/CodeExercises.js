@@ -12,8 +12,6 @@ export class onChangeContextData {
     public rangeValues: ValueInEditableRanges;
 }
 
-export type supportedLanguage = "javascript" | "html" | "json" | "css" | "scss" | "less" | "handlebars" | "razor" | "typescript";
-
 const debounceTime = 200; // ms
 export class MonacoEditor {
     protected _rangeRestrictions: RangeRestriction[] = [];
@@ -45,11 +43,10 @@ export class MonacoEditor {
         return values;
     }
 
-    constructor(element: HTMLElement, content?: string, language?: supportedLanguage) {
-        this._editorInstance = monaco.editor.create(element, {
-            value: content,
-            language: language
-        });
+    constructor(element: HTMLElement, content?: string, config?: editor.IStandaloneEditorConstructionOptions) {
+        const options: editor.IStandaloneEditorConstructionOptions = { value: content, ...config };
+
+        this._editorInstance = monaco.editor.create(element, options);
 
         this._constrainedInstance = constrainedEditor(monaco);
         this._constrainedInstance.initializeIn(this._editorInstance);

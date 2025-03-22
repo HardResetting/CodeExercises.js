@@ -8,7 +8,7 @@ import IValidationRule from "./IValidationRule";
 import HtmlExcercise from "./HTML/HtmlExercise";
 import HtmlValidationRule from "./HTML/HtmlValidationRule";
 import HtmlValidationRuleSet from "./HTML/HtmlValidationRuleSet";
-import { MonacoEditor, onChangeContextData, supportedLanguage } from "./MonacoEditor";
+import { MonacoEditor, onChangeContextData } from "./MonacoEditor";
 import Validation from "./Validation";
 import ValidationResult from "./ValidationResult";
 
@@ -25,7 +25,6 @@ export {
     HtmlValidationRuleSet,
     MonacoEditor,
     onChangeContextData,
-    supportedLanguage,
     Validation,
     ValidationResult
 };

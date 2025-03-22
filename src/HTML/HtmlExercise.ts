@@ -2,13 +2,14 @@ import Excercise from "../Exercise";
 import HtmlValidationRuleSet from "./HtmlValidationRuleSet";
 import ValidationResult from "../ValidationResult";
 import HtmlValidationRule from "./HtmlValidationRule";
+import { editor } from "monaco-editor/esm/vs/editor/editor.api";
 
 export default class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlValidationRuleSet> {
     public readonly iframe: HTMLIFrameElement;
     protected override _ruleSets: HtmlValidationRuleSet[];
 
-    constructor(monacoEditorElement: HTMLElement, content?: string, iframe?: HTMLIFrameElement) {
-        super(monacoEditorElement, content);
+    constructor(monacoEditorElement: HTMLElement, content?: string, iframe?: HTMLIFrameElement, monacoConfig?: editor.IStandaloneEditorConstructionOptions) {
+        super(monacoEditorElement, content, monacoConfig);
         this._ruleSets = [];
         if (iframe == null) {
             const newIFrame = document.createElement("iframe");

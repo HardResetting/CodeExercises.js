@@ -4,15 +4,16 @@ import { MonacoEditor } from "./MonacoEditor";
 import ValidationRuleSet from "./Validation";
 import IValidationRule from "./IValidationRule";
 import ValidationResult from "./ValidationResult";
+import { editor } from "monaco-editor/esm/vs/editor/editor.api";
 
 export default abstract class Excercise<RuleType extends IValidationRule, RuleSetType extends ValidationRuleSet<RuleType>> {
     protected _editableFields: EditableField[];
     protected abstract readonly _ruleSets: RuleSetType[];
     protected readonly _monacoEditorInstance: MonacoEditor;
 
-    constructor(monacoEditorElement: HTMLElement, content?: string) {
+    constructor(monacoEditorElement: HTMLElement, content?: string, monacoConfig?: editor.IStandaloneEditorConstructionOptions) {
         this._editableFields = [];
-        this._monacoEditorInstance = new MonacoEditor(monacoEditorElement, content, "html");
+        this._monacoEditorInstance = new MonacoEditor(monacoEditorElement, content, { language: "html", ...monacoConfig });
 
         this._monacoEditorInstance.onChangeContext.on(() => {
             this.validate();
@@ -27,6 +28,10 @@ export default abstract class Excercise<RuleType extends IValidationRule, RuleSe
 
     public get content(): string {
         return this._monacoEditorInstance.content;
+    }
+
+    public get monacoEditorInstance(): MonacoEditor {
+        return this._monacoEditorInstance;
     }
 
     public setEditableFields(fields: EditableField[]) {
