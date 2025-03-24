@@ -30,8 +30,8 @@ export default abstract class Excercise<RuleType extends IValidationRule, RuleSe
         return this._monacoEditorInstance.content;
     }
 
-    public get monacoEditorInstance(): MonacoEditor {
-        return this._monacoEditorInstance;
+    public get monacoEditorInstance(): editor.IStandaloneCodeEditor {
+        return this._monacoEditorInstance.editorInstance;
     }
 
     public setEditableFields(fields: EditableField[]) {

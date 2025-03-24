@@ -34,6 +34,10 @@ export class MonacoEditor {
         return this._model.getValue();
     }
 
+    public get editorInstance() {
+        return this._editorInstance;
+    }
+
     public get rangeValues(): ValueInEditableRanges {
         let values: ValueInEditableRanges = {};
         if (this._rangeRestrictions.length > 0) {
