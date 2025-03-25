@@ -1,6 +1,6 @@
 {
   "name": "code-exercises-js",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "main": "dist/codeExercises.esm.js",
   "scripts": {
     "build": "webpack",
