@@ -2,7 +2,7 @@ import IValidationRule from "./IValidationRule";
 
 export default abstract class ValidationRuleSet<RuleType extends IValidationRule> {
     abstract rules: ReadonlyArray<RuleType>;
-    protected _stopOnFail: boolean = true;
+    protected _stopOnFail: boolean = false;
     protected _negateNext = false;
 
     get shouldStopOnFail() {
