@@ -10,6 +10,10 @@ export default class ValidationResultSummary {
     get results() {
         return this._validationResultGroups.map(e => e.results).flat();
     }
+
+    get resultGroups() {
+        return this._validationResultGroups;
+    }
     
     getInvalidResults() {
         return this.results.filter(obj => !obj.isValid);
