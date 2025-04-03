@@ -10,7 +10,7 @@ import HtmlValidationRule from "./HTML/HtmlValidationRule";
 import HtmlValidationRuleSet from "./HTML/HtmlValidationRuleSet";
 import { MonacoEditor, onChangeContextData } from "./MonacoEditor";
 import Validation from "./Validation";
-import ValidationResult from "./ValidationResult";
+import ValidationResult from "./ValidationResultGroup";
 
 export {
     EditableField,

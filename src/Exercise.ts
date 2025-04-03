@@ -3,15 +3,20 @@ import Event from "./Event";
 import { MonacoEditor } from "./MonacoEditor";
 import ValidationRuleSet from "./Validation";
 import IValidationRule from "./IValidationRule";
-import ValidationResult from "./ValidationResult";
 import { editor } from "monaco-editor/esm/vs/editor/editor.api";
+import { select } from 'optimal-select';
+import ValidationResultGroup from "./ValidationResultGroup";
+import ValidationResultSummary from "./ValidationSummary";
 
 export default abstract class Excercise<RuleType extends IValidationRule, RuleSetType extends ValidationRuleSet<RuleType>> {
     protected _editableFields: EditableField[];
     protected abstract readonly _ruleSets: RuleSetType[];
     protected readonly _monacoEditorInstance: MonacoEditor;
+    protected readonly id: string
 
     constructor(monacoEditorElement: HTMLElement, content?: string, monacoConfig?: editor.IStandaloneEditorConstructionOptions) {
+        this.id = select(monacoEditorElement);
+
         this._editableFields = [];
         this._monacoEditorInstance = new MonacoEditor(monacoEditorElement, content, { language: "html", ...monacoConfig });
 
@@ -24,7 +29,7 @@ export default abstract class Excercise<RuleType extends IValidationRule, RuleSe
 
     protected abstract validateRule(rule: RuleType): Promise<boolean> | boolean;
 
-    public readonly onValidate = new Event<ValidationResult>();
+    public readonly onValidate = new Event<ValidationResultSummary>();
 
     public get content(): string {
         return this._monacoEditorInstance.content;
@@ -44,9 +49,9 @@ export default abstract class Excercise<RuleType extends IValidationRule, RuleSe
         this.editableFieldsChanged();
     }
 
-    public async validate(): Promise<ValidationResult> {
+    public async validate(): Promise<ValidationResultSummary> {
         const rangeValues = this._monacoEditorInstance.rangeValues;
-        const result = this._editableFields
+        const results = this._editableFields
             .map(e => {
                 const val = rangeValues[e.id];
                 if (val == null) {
@@ -56,16 +61,17 @@ export default abstract class Excercise<RuleType extends IValidationRule, RuleSe
                 return e.validate(val);
             })
             .concat((await this.validateExtend()))
-            .reduce((prev, cur) => new ValidationResult(prev.errors.concat(cur.errors)));
+            .flat();
 
-        this.onValidate.trigger(result);
-        return result;
+        const summary = new ValidationResultSummary(results);
+        this.onValidate.trigger(summary);
+        return summary;
     }
 
     /**
      * Override this method to add custom validation
      */
-    protected abstract validateExtend(): Promise<ValidationResult>;
+    protected abstract validateExtend(): Promise<Array<ValidationResultGroup>>;
 
     private editableFieldsChanged(): void {
         const list: RangeRestriction[] = [];

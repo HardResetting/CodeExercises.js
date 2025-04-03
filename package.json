@@ -1,6 +1,6 @@
 {
   "name": "code-exercises-js",
-  "version": "1.0.12",
+  "version": "2.0.0",
   "main": "dist/codeExercises.esm.js",
   "scripts": {
     "build": "webpack",
@@ -33,6 +33,7 @@
   "dependencies": {
     "debounce": "^2.2.0",
     "delta-e": "^0.0.8",
-    "monaco-editor": "^0.52.2"
+    "monaco-editor": "^0.52.2",
+    "optimal-select": "^4.0.1"
   }
 }

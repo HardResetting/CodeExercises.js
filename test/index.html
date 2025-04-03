@@ -63,7 +63,7 @@
 
             htmlExcercise.onValidate.on(data => {
                 console.log(data);
-                response.innerText = data.valid ? "Gut gemacht! Alles richtig!" : "Folgendes ist noch falsch: " + data.errors.reduce((e, a) => e + "\n" + a, "");
+                response.innerText = data.valid ? "Gut gemacht! Alles richtig!" : "Folgendes ist noch falsch: " + data.getInvalidMessages().reduce((e, a) => e + "\n" + a, "");
             });
 
             return htmlExcercise;

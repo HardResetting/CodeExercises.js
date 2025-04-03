@@ -1,12 +1,25 @@
+import ValidationResult from "../ValidationResult";
 import { color2Lab } from "../Color";
 import ValidationRuleSet from "../Validation";
 import HtmlValidationRule from "./HtmlValidationRule";
 import { getDeltaE00 } from "delta-e"
+import ValidationResultGroup from "../ValidationResultGroup";
 
 export default class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidationRule> {
     private _rules: HtmlValidationRule[] = [];
     get rules(): ReadonlyArray<HtmlValidationRule> {
         return this._rules as ReadonlyArray<HtmlValidationRule>;
+    }
+
+    validate(content: string, iframeDoc: Document): ValidationResultGroup {
+        const results: ValidationResult[] = [];
+
+        for (const rule of this._rules) {
+            const valid = rule.method(content, iframeDoc);
+            const result = new ValidationResult(rule.message, valid ? "valid" : "invalid")
+            results.push(result);
+        }
+        return new ValidationResultGroup(this.id, results);
     }
 
     lambda(

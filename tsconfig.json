@@ -21,8 +21,9 @@
     },
     "include": [
         "src/**/*",
-        "global.d.ts"
-    ],
+        "global.d.ts",
+        "optimal-select.d.ts"
+, "optimal-select.d.ts"    ],
     "exclude": [
         "node_modules"
     ]

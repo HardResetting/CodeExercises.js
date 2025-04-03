@@ -1,6 +1,6 @@
 import Excercise from "../Exercise";
 import HtmlValidationRuleSet from "./HtmlValidationRuleSet";
-import ValidationResult from "../ValidationResult";
+import ValidationResultGroup from "../ValidationResultGroup";
 import HtmlValidationRule from "./HtmlValidationRule";
 import { editor } from "monaco-editor/esm/vs/editor/editor.api";
 
@@ -33,7 +33,7 @@ export default class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlVal
         return obj;
     }
 
-    protected async validateExtend(): Promise<ValidationResult> {
+    protected async validateExtend(): Promise<Array<ValidationResultGroup>> {
         this.renderIframe();
 
         const contendDocument = this.iframe.contentDocument;
@@ -41,20 +41,14 @@ export default class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlVal
             throw "contendDocument was null!";
         }
 
-        const errors: string[] = [];
+        const validationResults: ValidationResultGroup[] = [];
 
         for (const ruleSet of this._ruleSets) {
-            for (const rule of ruleSet.rules) {
-                if (!(await rule.method(this.content, contendDocument))) {
-                    errors.push(rule.message);
-                    if (ruleSet.shouldStopOnFail) {
-                        break;
-                    }
-                }
-            }
+            const res = ruleSet.validate(this.content, contendDocument);
+            validationResults.push(res);
         }
 
-        return new ValidationResult(errors);
+        return validationResults;
     }
 
     protected async validateRule(rule: HtmlValidationRule): Promise<boolean> {

@@ -1,5 +1,7 @@
 import EditableFieldValidationRuleSet from "./EditableFieldValidationRuleSet";
+import ValidationResultGroup from "./ValidationResultGroup";
 import ValidationResult from "./ValidationResult";
+
 
 export default class EditableField {
     private readonly _ruleSets: Array<EditableFieldValidationRuleSet> = [];
@@ -18,19 +20,23 @@ export default class EditableField {
         this.id = crypto.randomUUID();
     }
 
-    public validate(content: string): ValidationResult {
-        const errors: string[] = [];
+    public validate(content: string): ValidationResultGroup[] {
+        const validationResults: ValidationResultGroup[] = [];
 
         for (const ruleSet of this._ruleSets) {
+            const results: ValidationResult[] = [];
             for (const rule of ruleSet.rules) {
-                if (!(rule.method(content))) {
-                    errors.push(rule.message);
-                    if (ruleSet.shouldStopOnFail) {
-                        break;
-                    }
+
+                const valid = rule.method(content);
+                const result = new ValidationResult(rule.message, valid ? "valid" : "invalid")
+                results.push(result);
+                if (!valid && ruleSet.shouldStopOnFail) {
+                    break;
                 }
             }
+            const resultGroup = new ValidationResultGroup(this.id, results)
+            validationResults.push(resultGroup);
         }
-        return new ValidationResult(errors);
+        return validationResults;
     }
 }

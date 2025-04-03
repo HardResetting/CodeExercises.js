@@ -1,10 +1,15 @@
+type Status = "valid" | "invalid";
 export default class ValidationResult {
-    get valid(): boolean {
-        return (this.errors?.length ?? 0) == 0;
-    };
-    errors: string[];
 
-    constructor(errors?: string[]) {
-        this.errors = errors ?? [];
+    get isValid(): boolean {
+        return this.status === "valid";
+    };
+
+    readonly message: string;
+    readonly status: Status;
+
+    constructor(message: string, status: Status) {
+        this.message = message;
+        this.status = status;
     }
 }

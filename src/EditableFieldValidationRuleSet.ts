@@ -1,5 +1,6 @@
 import EditableFieldValidationRule from "./EditableFieldValidationRule";
 import ValidationRuleSet from "./Validation";
+import ValidationResultGroup from "./ValidationResultGroup";
 import ValidationResult from "./ValidationResult";
 
 export default class EditableFieldValidationRuleSet extends ValidationRuleSet<EditableFieldValidationRule> {
@@ -8,15 +9,15 @@ export default class EditableFieldValidationRuleSet extends ValidationRuleSet<Ed
         return this._rules;
     }
 
-    validate(val: string): ValidationResult {
-        const errors: string[] = [];
+    validate(val: string): ValidationResultGroup {
+        const results: ValidationResult[] = [];
 
         for (const rule of this._rules) {
-            if (!rule.method(val)) {
-                errors.push(rule.message);
-            }
+            const valid = rule.method(val);
+            const result = new ValidationResult(rule.message, valid ? "valid" : "invalid")
+            results.push(result);
         }
-        return new ValidationResult(errors);
+        return new ValidationResultGroup(this.id, results);
     }
 
     lambda(method: (val: string) => boolean, message: string): EditableFieldValidationRuleSet {

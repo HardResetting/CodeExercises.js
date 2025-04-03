@@ -2,8 +2,13 @@ import IValidationRule from "./IValidationRule";
 
 export default abstract class ValidationRuleSet<RuleType extends IValidationRule> {
     abstract rules: ReadonlyArray<RuleType>;
+    protected readonly id: string;
     protected _stopOnFail: boolean = false;
     protected _negateNext = false;
+
+    constructor() {
+        this.id = crypto.randomUUID();
+    }
 
     get shouldStopOnFail() {
         return this._stopOnFail;
@@ -19,4 +24,3 @@ export default abstract class ValidationRuleSet<RuleType extends IValidationRule
         return this;
     }
 }
-
