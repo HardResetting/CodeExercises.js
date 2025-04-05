@@ -14,11 +14,24 @@ export default class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidat
     validate(content: string, iframeDoc: Document): ValidationResultGroup {
         const results: ValidationResult[] = [];
 
-        for (const rule of this._rules) {
-            const valid = rule.method(content, iframeDoc);
-            const result = new ValidationResult(rule.message, valid ? "valid" : "invalid")
-            results.push(result);
+        let validate = true;
+        for (let i = 0; i < this._rules.length; ++i) {
+            const rule = this._rules[i];
+
+            if (validate) {
+                const valid = rule.method(content, iframeDoc);
+                const result = new ValidationResult(rule.message, valid ? "valid" : "invalid");
+                results.push(result);
+
+                if (!valid && this.shouldStopOnFail) {
+                    validate = false;
+                }
+            } else {
+                const result = new ValidationResult(rule.message);
+                results.push(result);
+            }
         }
+
         return new ValidationResultGroup(this.id, results);
     }
 

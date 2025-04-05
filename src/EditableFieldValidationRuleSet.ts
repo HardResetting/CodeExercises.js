@@ -12,11 +12,27 @@ export default class EditableFieldValidationRuleSet extends ValidationRuleSet<Ed
     validate(val: string): ValidationResultGroup {
         const results: ValidationResult[] = [];
 
-        for (const rule of this._rules) {
-            const valid = rule.method(val);
-            const result = new ValidationResult(rule.message, valid ? "valid" : "invalid")
-            results.push(result);
+        let validate = true;
+        for (let i = 0; i < this._rules.length; ++i) {
+            const rule = this._rules[i];
+
+            console.log(rule.message);
+            
+
+            if (validate) {
+                const valid = rule.method(val);
+                const result = new ValidationResult(rule.message, valid ? "valid" : "invalid");
+                results.push(result);
+
+                if (!valid && this.shouldStopOnFail) {
+                    validate = false;
+                }
+            } else {
+                const result = new ValidationResult(rule.message);
+                results.push(result);
+            }
         }
+
         return new ValidationResultGroup(this.id, results);
     }
 

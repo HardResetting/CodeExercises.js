@@ -1,4 +1,4 @@
-type Status = "valid" | "invalid";
+type Status = "valid" | "invalid" | "unknown";
 export default class ValidationResult {
 
     get isValid(): boolean {
@@ -8,7 +8,7 @@ export default class ValidationResult {
     readonly message: string;
     readonly status: Status;
 
-    constructor(message: string, status: Status) {
+    constructor(message: string, status: Status = "unknown") {
         this.message = message;
         this.status = status;
     }

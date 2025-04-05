@@ -24,19 +24,10 @@ export default class EditableField {
         const validationResults: ValidationResultGroup[] = [];
 
         for (const ruleSet of this._ruleSets) {
-            const results: ValidationResult[] = [];
-            for (const rule of ruleSet.rules) {
-
-                const valid = rule.method(content);
-                const result = new ValidationResult(rule.message, valid ? "valid" : "invalid")
-                results.push(result);
-                if (!valid && ruleSet.shouldStopOnFail) {
-                    break;
-                }
-            }
-            const resultGroup = new ValidationResultGroup(this.id, results)
-            validationResults.push(resultGroup);
+            const res = ruleSet.validate(content);
+            validationResults.push(res);
         }
+
         return validationResults;
     }
 }
