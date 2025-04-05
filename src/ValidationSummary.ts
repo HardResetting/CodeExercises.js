@@ -7,6 +7,10 @@ export default class ValidationResultSummary {
         this._validationResultGroups = validationResultGroups;
     }
 
+    get valid() {
+        return this.getInvalidResults().length == 0;
+    }
+
     get results() {
         return this._validationResultGroups.map(e => e.results).flat();
     }
@@ -14,11 +18,11 @@ export default class ValidationResultSummary {
     get resultGroups() {
         return this._validationResultGroups;
     }
-    
+
     getInvalidResults() {
         return this.results.filter(obj => !obj.isValid);
     }
-    
+
     getValidResults() {
         return this.results.filter(obj => obj.isValid);
     }
@@ -30,7 +34,7 @@ export default class ValidationResultSummary {
     getValidMessages() {
         return this.results.filter(obj => obj.isValid).map(obj => obj.message);
     }
-    
+
     getMessages() {
         return this.results.map(obj => obj.message);
     }
