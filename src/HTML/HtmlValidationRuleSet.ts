@@ -73,7 +73,6 @@ export default class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidat
                 } catch (error) {
                     console.error("Error:", error);
                 }
-                console.log(response.messages); // Output the response
 
                 return response.messages.length == 0;
             },
@@ -122,7 +121,6 @@ export default class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidat
 
                 const lab2 = color2Lab(propertyStr);
                 const deltaResult = getDeltaE00(lab1, lab2);
-                console.log(deltaResult);
 
                 return deltaResult <= delta;
             },

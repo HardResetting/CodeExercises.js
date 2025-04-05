@@ -14,10 +14,7 @@ export default class EditableFieldValidationRuleSet extends ValidationRuleSet<Ed
 
         let validate = true;
         for (let i = 0; i < this._rules.length; ++i) {
-            const rule = this._rules[i];
-
-            console.log(rule.message);
-            
+            const rule = this._rules[i];   
 
             if (validate) {
                 const valid = rule.method(val);
