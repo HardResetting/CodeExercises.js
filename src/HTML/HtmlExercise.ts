@@ -44,7 +44,7 @@ export default class HtmlExcercise extends Excercise<HtmlValidationRule, HtmlVal
         const validationResults: ValidationResultGroup[] = [];
 
         for (const ruleSet of this._ruleSets) {
-            const res = ruleSet.validate(this.content, contendDocument);
+            const res = await ruleSet.validate(this.content, contendDocument);
             validationResults.push(res);
         }
 

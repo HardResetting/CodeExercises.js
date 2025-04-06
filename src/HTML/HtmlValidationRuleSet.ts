@@ -11,7 +11,7 @@ export default class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidat
         return this._rules as ReadonlyArray<HtmlValidationRule>;
     }
 
-    validate(content: string, iframeDoc: Document): ValidationResultGroup {
+    async validate(content: string, iframeDoc: Document): Promise<ValidationResultGroup> {
         const results: ValidationResult[] = [];
 
         let validate = true;
@@ -19,7 +19,7 @@ export default class HtmlValidationRuleSet extends ValidationRuleSet<HtmlValidat
             const rule = this._rules[i];
 
             if (validate) {
-                const valid = rule.method(content, iframeDoc);
+                const valid = await rule.method(content, iframeDoc);
                 const result = new ValidationResult(rule.message, valid ? "valid" : "invalid");
                 results.push(result);
 

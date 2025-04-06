@@ -39,15 +39,10 @@
 
             const htmlExcercise = new HtmlExcercise(element, content, iframe, { minimap: { enabled: false }, wordWrap: "on", lineNumbers: "off", folding: false });
 
-            console.log(htmlExcercise.addValidationRule());
-
             htmlExcercise.addValidationRule()
                 .stopOnFail(false)
-                .required()
-                .not.iframeContains(".style-me", "no '.Style-me'-element!")
-                .contentIncludes("here")
-                .elementIncludesText("body>div", "me")
-                .elementHasAttributeColor(".style-me", "background-color", "#f00", null)
+                .not.required("req")
+                .iframeContains(".style-me", "no '.Style-me'-element!")
                 ;
 
 
@@ -59,7 +54,7 @@
             divField.addValidationRule()
                 .not.required();
 
-            htmlExcercise.setEditableFields([styleField, divField]);
+            // htmlExcercise.setEditableFields([styleField, divField]);
 
             htmlExcercise.onValidate.on(data => {
                 console.log(data);
