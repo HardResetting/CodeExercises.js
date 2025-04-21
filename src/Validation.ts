@@ -19,7 +19,7 @@ export default abstract class ValidationRuleSet<RuleType extends IValidationRule
         return this;
     }
 
-    stopOnFail(bool: boolean) {
+    stopOnFail(bool: boolean = true) {
         this._stopOnFail = bool;
         return this;
     }

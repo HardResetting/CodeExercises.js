@@ -4,7 +4,7 @@ export default class ValidationResultGroup {
     private readonly _results: Array<ValidationResult>;
     readonly id: string;
     get isValid(): boolean {
-        return (this.results?.length ?? 0) == 0;
+        return this.getInvalidResults().length == 0;
     };
 
     constructor(id: string, results: Array<ValidationResult>) {
